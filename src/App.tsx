@@ -23,6 +23,7 @@ import TagPage from "./pages/Blogs/tag/TagPage.tsx";
 import PostPage from "./pages/Blogs/post/PostPage.tsx";
 import ResetPassword from "./pages/AuthPages/ResetPassword.tsx";
 import QueueServicePage from "./pages/Queue/Service/QueueServicePage.tsx";
+import QueueProcessNumberPage from "./pages/Queue/Process/QueueProcessNumberPage.tsx";
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
             <Route path="/blogs/post" element={<PostPage />} />
 
             <Route path="/queue/service" element={<QueueServicePage />} />
+            <Route path="/queue/process/number/:serviceId" element={<QueueProcessNumberPage />} />
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />

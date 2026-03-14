@@ -6,6 +6,7 @@ import {QueueServiceData} from "../../../types/queue/queue_service.ts";
 import {deleteQueueService, getQueueService} from "../../../api/queue/service.ts";
 import {ServiceFormPage} from "./components/ServiceFormPage.tsx";
 import {showConfirm, showError, showSuccess} from "../../../helpers/confirm_delete.helper.tsx";
+import {useNavigate} from "react-router";
 
 export default function QueueServicePage() {
     const [optionSearch, setOptionSearch] = useState({
@@ -16,13 +17,18 @@ export default function QueueServicePage() {
         total: 0,
         isSearch: true
     });
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [data, setData] = useState<QueueServiceData[]>([]);
     const [dataEdit, setDataEdit] = useState<QueueServiceData | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false); // 👈 state modal
     const handleAdd = () => {
+        setDataEdit(null)
         setIsModalOpen(true); // buka modal
     };
+    const handleGetQueue = async (row: QueueServiceData) => {
+        navigate(`/queue/process/number/${row.id}`);
+    }
 
     const fetchData = () => {
         if(optionSearch.isSearch) {
@@ -83,7 +89,7 @@ export default function QueueServicePage() {
         })
     };
 
-    const handleEdit = (data: BlogCategory) => {
+    const handleEdit = (data: QueueServiceData) => {
         setDataEdit(data)
         setIsModalOpen(true); // buka modal
     }
@@ -94,10 +100,10 @@ export default function QueueServicePage() {
                 title="Saetechnology - Queue - Service"
                 description="Saetechnology - Queue - Service"
             />
-            <PageBreadcrumb pageTitle="Category" />
+            <PageBreadcrumb pageTitle="Get Number" />
             <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
                 <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-                    Queue Service
+                    Queue Number
                 </h3>
 
                 {/* 🔍 Toolbar filter & action */}
@@ -167,16 +173,20 @@ export default function QueueServicePage() {
                             ...optionSearch,
                             isSearch: true
                         })
-                    }}  handleDelete={handleDelete} handleEdit={handleEdit} />
+                    }}  handleDelete={handleDelete} handleEdit={handleEdit} handleGetQueue={handleGetQueue} />
                 </div>
             </div>
-            <ServiceFormPage dataEdit={dataEdit} isModalOpen={isModalOpen} setIsModalOpen={() => {
-                setIsModalOpen(!isModalOpen)
-                setOptionSearch({
-                    ...optionSearch,
-                    isSearch: true
-                })
-            }} />
+                <ServiceFormPage dataEdit={{
+                    name: dataEdit?.name ?? "",
+                    id: dataEdit?.id ?? "",
+                    description: dataEdit?.description ?? "",
+                }} isModalOpen={isModalOpen} setIsModalOpen={() => {
+                    setIsModalOpen(!isModalOpen)
+                    setOptionSearch({
+                        ...optionSearch,
+                        isSearch: true
+                    })
+                }} />
         </>
     );
 }

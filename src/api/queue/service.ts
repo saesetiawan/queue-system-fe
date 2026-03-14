@@ -30,8 +30,8 @@ export const createQueueService = async (payload: QueueServiceForm): Promise<Que
     return res.data;
 };
 
-export const updateQueueService = async (payload: QueueServiceForm): Promise<QueueServiceForm> => {
-    const res = await axiosClient.put<QueueServiceForm>(prefix, {
+export const updateQueueService = async (id: string, payload: QueueServiceForm): Promise<QueueServiceForm> => {
+    const res = await axiosClient.put<QueueServiceForm>(`${prefix}/${id}`, {
         ...payload
     });
     return res.data;

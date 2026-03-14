@@ -2,6 +2,7 @@ import {useState} from "react";
 import {Login} from "../api/auth/login.api.ts";
 import {AxiosError} from "axios";
 import {NavigateFunction } from "react-router";
+import {showError, showWarning} from "../helpers/confirm_delete.helper.tsx";
 
 
 export const UseLogin = (navigate: NavigateFunction) => {
@@ -20,7 +21,11 @@ export const UseLogin = (navigate: NavigateFunction) => {
             navigate("/");
         } catch (err: unknown) {
             if(err instanceof AxiosError) {
-                console.error("Login failed:", err.response?.data || err.message);
+                if(err.response?.status === 400 && err.response?.data?.message && err.response?.data?.message[0]) {
+                 showWarning("Warning!", err.response?.data?.message[0])
+                }
+            } else {
+                showError('Error!', "Unauthorized");
             }
         } finally {
             setLoading(false);
